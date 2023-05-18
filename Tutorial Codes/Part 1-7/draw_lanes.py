@@ -11,7 +11,7 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
         # finds the maximum y value for a lane marker 
         # (since we cannot assume the horizon will always be at the same point.)
 
-        ys = []  
+        ys = []
         for i in lines:
             for ii in i:
                 ys += [ii[1],ii[3]]
@@ -44,10 +44,10 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
             m = line_dict[idx][0]
             b = line_dict[idx][1]
             line = line_dict[idx][2]
-            
-            if len(final_lanes) == 0:
+
+            if not final_lanes:
                 final_lanes[m] = [ [m,b,line] ]
-                
+
             else:
                 found_copy = False
 
@@ -89,4 +89,4 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
 
         return [l1_x1, l1_y1, l1_x2, l1_y2], [l2_x1, l2_y1, l2_x2, l2_y2], lane1_id, lane2_id
     except Exception as e:
-        print(str(e))
+        print(e)

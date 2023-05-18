@@ -28,7 +28,7 @@ if LOAD_MODEL:
 # iterates through the training files
 for e in range(EPOCHS):
 ##    data_order = [i for i in range(1,FILE_I_END+1)]
-    data_order = [i for i in range(1, FILE_I_END + 1)]
+    data_order = list(range(1, FILE_I_END + 1))
     shuffle(data_order)
     for count, i in enumerate(data_order):
         try:

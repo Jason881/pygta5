@@ -14,7 +14,7 @@ WIDTH = 160
 HEIGHT = 120
 LR = 1e-3
 EPOCHS = 10
-MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2',EPOCHS)
+MODEL_NAME = f'pygta5-car-fast-{LR}-alexnetv2-{EPOCHS}-epochs-300K-data.model'
 
 t_time = 0.09
 
@@ -54,13 +54,13 @@ def main():
         time.sleep(1)
 
     paused = False
-    while(True):
+    while True:
         
         if not paused:
             # 800x600 windowed mode
             #screen =  np.array(ImageGrab.grab(bbox=(0,40,800,640)))
             screen = grab_screen(region=(0,40,800,640))
-            print('loop took {} seconds'.format(time.time()-last_time))
+            print(f'loop took {time.time() - last_time} seconds')
             last_time = time.time()
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
             screen = cv2.resize(screen, (160,120))
@@ -71,28 +71,29 @@ def main():
             turn_thresh = .75
             fwd_thresh = 0.70
 
-            if prediction[1] > fwd_thresh:
+            if (
+                prediction[1] > fwd_thresh
+                or prediction[0] <= turn_thresh
+                and prediction[2] <= turn_thresh
+            ):
                 straight()
             elif prediction[0] > turn_thresh:
                 left()
-            elif prediction[2] > turn_thresh:
-                right()
             else:
-                straight()
-
+                right()
         keys = key_check()
 
         # p pauses game and can get annoying.
         if 'T' in keys:
             if paused:
                 paused = False
-                time.sleep(1)
             else:
                 paused = True
                 ReleaseKey(A)
                 ReleaseKey(W)
                 ReleaseKey(D)
-                time.sleep(1)
+
+            time.sleep(1)
 
 main()       
 

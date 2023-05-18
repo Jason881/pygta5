@@ -83,15 +83,35 @@ class vJoy(object):
         } JOYSTICK_POSITION, *PJOYSTICK_POSITION;
         """
         joyPosFormat = "BlllllllllllllllllllIIII"
-        pos = struct.pack( joyPosFormat, self.reference, wThrottle, wRudder,
-                                   wAileron, wAxisX, wAxisY, wAxisZ, wAxisXRot, wAxisYRot,
-                                   wAxisZRot, wSlider, wDial, wWheel, wAxisVX, wAxisVY, wAxisVZ,
-                                   wAxisVBRX, wAxisVBRY, wAxisVBRZ, lButtons, bHats, bHatsEx1, bHatsEx2, bHatsEx3 )
-        return pos
+        return struct.pack(
+            joyPosFormat,
+            self.reference,
+            wThrottle,
+            wRudder,
+            wAileron,
+            wAxisX,
+            wAxisY,
+            wAxisZ,
+            wAxisXRot,
+            wAxisYRot,
+            wAxisZRot,
+            wSlider,
+            wDial,
+            wWheel,
+            wAxisVX,
+            wAxisVY,
+            wAxisVZ,
+            wAxisVBRX,
+            wAxisVBRY,
+            wAxisVBRZ,
+            lButtons,
+            bHats,
+            bHatsEx1,
+            bHatsEx2,
+            bHatsEx3,
+        )
     def update(self, joystickPosition):
-        if self.dll.UpdateVJD( self.reference, joystickPosition ):
-            return True
-        return False
+        return bool(self.dll.UpdateVJD( self.reference, joystickPosition ))
     
     #Not working, send buttons one by one
     def sendButtons( self, bState ):
@@ -99,9 +119,7 @@ class vJoy(object):
         return self.update( joyPosition )
     
     def setButton( self, index, state ):
-        if self.dll.SetBtn( state, self.reference, index ):
-            return True
-        return False
+        return bool(self.dll.SetBtn( state, self.reference, index ))
                 
 
 vj = vJoy()
@@ -241,8 +259,8 @@ if __name__ == '__main__':
     for i in reversed(range(1,4)):
         print(i)
         time.sleep(1)
-    
-    for i in range(200):
+
+    for _ in range(200):
         reverse_brake()
         time.sleep(0.01)
 

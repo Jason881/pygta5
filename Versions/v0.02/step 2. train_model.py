@@ -17,8 +17,8 @@ HEIGHT = 90
 LR = 1e-3
 EPOCHS = 30
 
-MODEL_NAME = 'pygta5-FPV-color-{}-{}-LR-{}-files-balanced-v12.model'.format('googlenet_color',LR,FILE_I_END)
-PREV_MODEL = 'pygta5-FPV-color-{}-{}-LR-{}-files-balanced-v11.model'.format('googlenet_color',LR,FILE_I_END)
+MODEL_NAME = f'pygta5-FPV-color-googlenet_color-{LR}-LR-{FILE_I_END}-files-balanced-v12.model'
+PREV_MODEL = f'pygta5-FPV-color-googlenet_color-{LR}-LR-{FILE_I_END}-files-balanced-v11.model'
 
 LOAD_MODEL = True
 
@@ -48,19 +48,19 @@ model = googlenet(WIDTH, HEIGHT, 3, LR, output=9, model_name=MODEL_NAME)
 if LOAD_MODEL:
     model.load(PREV_MODEL)
     print('We have loaded a previous model!!!!')
-    
+
 
 # iterates through the training files
 
 
 for e in range(EPOCHS):
     #data_order = [i for i in range(1,FILE_I_END+1)]
-    data_order = [i for i in range(1,FILE_I_END+1)]
+    data_order = list(range(1,FILE_I_END+1))
     shuffle(data_order)
     for count,i in enumerate(data_order):
         
         try:
-            file_name = 'X:/pygta5/phase-7-balanced-just-color/training_data-{}.npy'.format(i)
+            file_name = f'X:/pygta5/phase-7-balanced-just-color/training_data-{i}.npy'
             # full file info
             train_data = np.load(file_name)
 
@@ -96,9 +96,9 @@ for e in range(EPOCHS):
             if count%10 == 0:
                 print('SAVING MODEL!')
                 model.save(MODEL_NAME)
-                    
+
         except Exception as e:
-            print(str(e))
+            print(e)
             
     
 

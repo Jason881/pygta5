@@ -124,7 +124,7 @@ def main():
 
     t_minus, t_now, t_plus = prev, prev, prev
 
-    while(True):
+    while True:
         if not paused:
             screen = grab_screen(region = (0, 40, GAME_WIDTH, GAME_HEIGHT + 40))
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
@@ -210,7 +210,7 @@ def main():
                     forward_left()
                     time.sleep(random.uniform(1, 2))
 
-                for i in range(log_len - 2):
+                for _ in range(log_len - 2):
                     del motion_log[0]
 
         keys = key_check()
@@ -219,13 +219,13 @@ def main():
         if 'T' in keys:
             if paused:
                 paused = False
-                time.sleep(1)
             else:
                 paused = True
                 ReleaseKey(A)
                 ReleaseKey(W)
                 ReleaseKey(D)
-                time.sleep(1)
+
+            time.sleep(1)
 
 if __name__ == "__main__":
     main()

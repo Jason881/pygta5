@@ -2,6 +2,7 @@
 After noticing such a substantial improvment 2.6% after my own manual changes,
 validating my expectations, i've decided to automate this process.
 '''
+
 import keras
 import os
 import pickle
@@ -43,7 +44,9 @@ close_dict = {
               }
 
 
-model = keras.models.load_model(f"trained_models/1536269759_xception-v1_p-01.0456_ta-0.73_va-0.38.model")
+model = keras.models.load_model(
+    "trained_models/1536269759_xception-v1_p-01.0456_ta-0.73_va-0.38.model"
+)
 
 
 while True:
@@ -81,9 +84,8 @@ while True:
                 if np.argmax(prediction) == np.argmax(y):
                     correct += 1
                     closeness += 1
-                else:
-                    if np.argmax(prediction) in close_dict[np.argmax(y)]:
-                        closeness += close_dict[np.argmax(y)][np.argmax(prediction)]
+                elif np.argmax(prediction) in close_dict[np.argmax(y)]:
+                    closeness += close_dict[np.argmax(y)][np.argmax(prediction)]
     print(30*"_")
     print("Weights:", WEIGHTS)
     print(f"Real mobile2-32-batch-0001.hdf5 accuracy: {round(correct/total, 3)}. Accuracy considering 'closeness': {round(closeness/total, 3)}")
@@ -93,10 +95,10 @@ while True:
     print()
 
     with open('log.txt', "a") as f:
-        f.write("Weights: "+str(WEIGHTS))
+        f.write(f"Weights: {WEIGHTS}")
         f.write('\n')
         f.write(f"Real mobile2-32-batch-0001.hdf5 accuracy: {round(correct/total, 3)}. Accuracy considering 'closeness': {round(closeness/total, 3)}\n")
-        f.write("Distribution: "+str(dist_dict))
+        f.write(f"Distribution: {dist_dict}")
         f.write("\n")
         f.write("\n")
         f.write("\n")

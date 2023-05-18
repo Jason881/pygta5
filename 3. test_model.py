@@ -136,7 +136,7 @@ def main():
     t_now = prev
     t_plus = prev
 
-    while(True):
+    while True:
         
         if not paused:
             screen = grab_screen(region=(0,40,GAME_WIDTH,GAME_HEIGHT+40))
@@ -160,11 +160,11 @@ def main():
             if mode_choice == 0:
                 straight()
                 choice_picked = 'straight'
-                
+
             elif mode_choice == 1:
                 reverse()
                 choice_picked = 'reverse'
-                
+
             elif mode_choice == 2:
                 left()
                 choice_picked = 'left'
@@ -189,8 +189,10 @@ def main():
 
             motion_log.append(delta_count)
             motion_avg = round(mean(motion_log),3)
-            print('loop took {} seconds. Motion: {}. Choice: {}'.format( round(time.time()-last_time, 3) , motion_avg, choice_picked))
-            
+            print(
+                f'loop took {round(time.time() - last_time, 3)} seconds. Motion: {motion_avg}. Choice: {choice_picked}'
+            )
+
             if motion_avg < motion_req and len(motion_log) >= log_len:
                 print('WERE PROBABLY STUCK FFS, initiating some evasive maneuvers.')
 
@@ -200,7 +202,7 @@ def main():
                 # 3 = reverse right, turn left out
 
                 quick_choice = random.randrange(0,4)
-                
+
                 if quick_choice == 0:
                     reverse()
                     time.sleep(random.uniform(1,2))
@@ -225,21 +227,21 @@ def main():
                     forward_left()
                     time.sleep(random.uniform(1,2))
 
-                for i in range(log_len-2):
+                for _ in range(log_len-2):
                     del motion_log[0]
-    
+
         keys = key_check()
 
         # p pauses game and can get annoying.
         if 'T' in keys:
             if paused:
                 paused = False
-                time.sleep(1)
             else:
                 paused = True
                 ReleaseKey(A)
                 ReleaseKey(W)
                 ReleaseKey(D)
-                time.sleep(1)
+
+            time.sleep(1)
 
 main()       

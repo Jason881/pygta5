@@ -23,26 +23,25 @@ def keys_to_output(keys):
     [W, S, A, D, WA, WD, SA, SD, NOKEY] boolean values.
     '''
     output = [0,0,0,0,0,0,0,0,0]
-    
+
     if 'W' in keys and 'A' in keys:
-        output = wa
+        return wa
     elif 'W' in keys and 'D' in keys:
-        output = wd
+        return wd
     elif 'S' in keys and 'A' in keys:
-        output = sa
+        return sa
     elif 'S' in keys and 'D' in keys:
-        output = sd
+        return sd
     elif 'W' in keys:
-        output = w
+        return w
     elif 'S' in keys:
-        output = s
+        return s
     elif 'A' in keys:
-        output = a
+        return a
     elif 'D' in keys:
-        output = d
+        return d
     else:
-        output = nk
-    return output
+        return nk
 
 file_name = 'training_data.npy'
 
@@ -61,7 +60,7 @@ def main():
         time.sleep(1)
 
     paused = False
-    while(True):
+    while True:
         if not paused:
             # 800x600 windowed mode
             screen = grab_screen(region=(0,40,800,640))
@@ -72,7 +71,7 @@ def main():
             keys = key_check()
             output = keys_to_output(keys)
             training_data.append([screen,output])
-            
+
             if len(training_data) % 1000 == 0:
                 print(len(training_data))
                 np.save(file_name,training_data)
@@ -82,11 +81,11 @@ def main():
             if paused:
                 paused = False
                 print('unpaused!')
-                time.sleep(1)
             else:
                 print('Pausing!')
                 paused = True
-                time.sleep(1)
+
+            time.sleep(1)
 
 
 main()

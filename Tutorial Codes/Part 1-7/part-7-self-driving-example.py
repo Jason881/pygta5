@@ -12,13 +12,11 @@ def roi(img, vertices):
     
     #blank mask:
     mask = np.zeros_like(img)   
-    
+
     #filling pixels inside the polygon defined by "vertices" with the fill color    
     cv2.fillPoly(mask, vertices, 255)
-    
-    #returning the image only where mask pixels are nonzero
-    masked = cv2.bitwise_and(img, mask)
-    return masked
+
+    return cv2.bitwise_and(img, mask)
 
 
 def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
@@ -29,7 +27,7 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
         # finds the maximum y value for a lane marker 
         # (since we cannot assume the horizon will always be at the same point.)
 
-        ys = []  
+        ys = []
         for i in lines:
             for ii in i:
                 ys += [ii[1],ii[3]]
@@ -62,10 +60,10 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
             m = line_dict[idx][0]
             b = line_dict[idx][1]
             line = line_dict[idx][2]
-            
-            if len(final_lanes) == 0:
+
+            if not final_lanes:
                 final_lanes[m] = [ [m,b,line] ]
-                
+
             else:
                 found_copy = False
 
@@ -107,16 +105,16 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
 
         return [l1_x1, l1_y1, l1_x2, l1_y2], [l2_x1, l2_y1, l2_x2, l2_y2], lane1_id, lane2_id
     except Exception as e:
-        print(str(e))
+        print(e)
 
 
 def process_img(image):
     original_image = image
     # edge detection
     processed_img =  cv2.Canny(image, threshold1 = 200, threshold2=300)
-    
+
     processed_img = cv2.GaussianBlur(processed_img,(5,5),0)
-    
+
     vertices = np.array([[10,500],[10,300],[300,200],[500,200],[800,300],[800,500],
                          ], np.int32)
 
@@ -132,17 +130,16 @@ def process_img(image):
         cv2.line(original_image, (l1[0], l1[1]), (l1[2], l1[3]), [0,255,0], 30)
         cv2.line(original_image, (l2[0], l2[1]), (l2[2], l2[3]), [0,255,0], 30)
     except Exception as e:
-        print(str(e))
-        pass
+        print(e)
     try:
         for coords in lines:
             coords = coords[0]
             try:
                 cv2.line(processed_img, (coords[0], coords[1]), (coords[2], coords[3]), [255,0,0], 3)
-                
-                
+
+
             except Exception as e:
-                print(str(e))
+                print(e)
     except Exception as e:
         pass
 
@@ -179,7 +176,7 @@ for i in list(range(4))[::-1]:
 last_time = time.time()
 while True:
     screen =  np.array(ImageGrab.grab(bbox=(0,40,800,640)))
-    print('Frame took {} seconds'.format(time.time()-last_time))
+    print(f'Frame took {time.time() - last_time} seconds')
     last_time = time.time()
     new_screen,original_image, m1, m2 = process_img(screen)
     #cv2.imshow('window', new_screen)
@@ -193,7 +190,7 @@ while True:
         left()
     else:
         straight()
-    
+
     #cv2.imshow('window',cv2.cvtColor(screen, cv2.COLOR_BGR2RGB))
     if cv2.waitKey(25) & 0xFF == ord('q'):
         cv2.destroyAllWindows()

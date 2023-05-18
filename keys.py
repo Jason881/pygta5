@@ -266,7 +266,7 @@ class Keys(object):
 
         # print keys
         if not self.standalone:
-            self.common.info("Processing keys: %s" % string)
+            self.common.info(f"Processing keys: {string}")
 
         key_queue = []
         errors = []
@@ -295,26 +295,25 @@ class Keys(object):
             if subkey == "VK":
                 key_type = self.virtual_keys
 
-            # switch to direct keys
             elif subkey == "DK":
                 key_type = self.direct_keys
 
-            # key code
             elif subkey.startswith("0x"):
                 subkey = int(subkey, 16)
                 if subkey > 0 and subkey < 256:
-                    key_queue.append({
-                        "key":  int(subkey),
-                        "okey": subkey,
-                        "time": 0,
-                        "up":   up,
-                        "down": down,
-                        "type": key_type,
-                    })
+                    key_queue.append(
+                        {
+                            "key": subkey,
+                            "okey": subkey,
+                            "time": 0,
+                            "up": up,
+                            "down": down,
+                            "type": key_type,
+                        }
+                    )
                 else:
                     errors.append(key)
 
-            # pause
             elif subkey.startswith("-"):
                 time = float(subkey.replace("-", ""))/1000
                 if time > 0 and time <= 10:
@@ -329,7 +328,6 @@ class Keys(object):
                 else:
                     errors.append(key)
 
-            # direct key
             elif key_type == self.direct_keys and subkey in self.dk:
                 key_queue.append({
                     "key":  self.dk[subkey],
@@ -340,7 +338,6 @@ class Keys(object):
                     "type": key_type,
                 })
 
-            # virtual key
             elif key_type == self.virtual_keys and subkey in self.vk:
                 key_queue.append({
                     "key":  self.vk[subkey],
@@ -351,7 +348,6 @@ class Keys(object):
                     "type": key_type,
                 })
 
-            # no match?
             else:
                 errors.append(key)
 

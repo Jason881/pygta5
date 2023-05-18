@@ -31,8 +31,7 @@ EPOCHS = 10
 DELTA_COUNT_THRESHOLD = 1000
 
 def delta_images(t0, t1, t2):
-    d1 = cv2.absdiff(t2, t0)
-    return d1
+    return cv2.absdiff(t2, t0)
 
 choices = deque([], maxlen=5)
 
@@ -65,7 +64,7 @@ with the x and y, your %s are out of 16393
     ################
     XYRANGE = 16393
     ZRANGE = 32786
-    
+
     wAxisX = 16393
     wAxisY = 16393
     wAxisZ = 0
@@ -91,7 +90,7 @@ with the x and y, your %s are out of 16393
     t_now = prev
     t_plus = prev
 
-    while(True):
+    while True:
         
         if not paused:
             screen = grab_screen(region=(0,40,GAME_WIDTH,GAME_HEIGHT+40))
@@ -123,7 +122,7 @@ with the x and y, your %s are out of 16393
             ##                                               w     s     a   d    wa   wd   sa   sd   nk 
             joy_choices = np.array(o_prediction) * np.array([4.5, 2.0, 1.0, 1.0, 1.8, 1.8, 1.0, 1.0, 1.0])
             # could in theory be a negative.
-            
+
             #            w                s                sa             sd                    nk
             throttle = joy_choices[0] - joy_choices[1] - joy_choices[6] - joy_choices[7] - joy_choices[8]
 
@@ -142,22 +141,25 @@ with the x and y, your %s are out of 16393
             motion_log.append(delta_count)
             motion_avg = round(mean(motion_log),3)
             fps  = 1 / round(time.time()-last_time, 3)
-            
+
+            vj.open()
             if throttle > 0:
-                vj.open()
                 joystickPosition = vj.generateJoystickPosition(wAxisZ=int(ZRANGE*throttle),wAxisX=int(XYRANGE + (turn*XYRANGE)))
                 vj.update(joystickPosition)
                 time.sleep(0.001)
                 vj.close()
-                print('FPS {}. Motion: {}. ThumbXaxis: {}. Throttle: {}. Brake: {}'.format(fps , motion_avg, int(XYRANGE + (turn*XYRANGE)), int(ZRANGE*throttle),0))  
+                print(
+                    f'FPS {fps}. Motion: {motion_avg}. ThumbXaxis: {int(XYRANGE + turn * XYRANGE)}. Throttle: {int(ZRANGE * throttle)}. Brake: 0'
+                )  
 
             else:
-                vj.open()
                 joystickPosition = vj.generateJoystickPosition(wAxisZRot=int(-1*(ZRANGE*throttle)),wAxisX=int(XYRANGE + (turn*XYRANGE)))
                 vj.update(joystickPosition)
                 time.sleep(0.001)
                 vj.close()
-                print('FPS {}. Motion: {}. ThumbXaxis: {}. Throttle: {}. Brake: {}'.format(fps , motion_avg, int(XYRANGE + (turn*XYRANGE)), 0, int(-1*(ZRANGE*throttle))))  
+                print(
+                    f'FPS {fps}. Motion: {motion_avg}. ThumbXaxis: {int(XYRANGE + turn * XYRANGE)}. Throttle: 0. Brake: {int(-1 * (ZRANGE * throttle))}'
+                )  
 
             mode_choice = np.argmax(prediction)
 
@@ -169,7 +171,7 @@ with the x and y, your %s are out of 16393
                 # 3 = reverse right, turn left out
 
                 quick_choice = random.randrange(0,4)
-                
+
                 if quick_choice == 0:
                     reverse()
                     time.sleep(random.uniform(1,2))
@@ -195,9 +197,9 @@ with the x and y, your %s are out of 16393
                     time.sleep(random.uniform(1,2))
 
 
-                for i in range(log_len-2):
+                for _ in range(log_len-2):
                     del motion_log[0]
-                    
+
 
         keys = key_check()
 
@@ -206,12 +208,12 @@ with the x and y, your %s are out of 16393
             ultimate_release()
             if paused:
                 paused = False
-                time.sleep(1)
             else:
                 paused = True
                 ReleaseKey(A)
                 ReleaseKey(W)
                 ReleaseKey(D)
-                time.sleep(1)
+
+            time.sleep(1)
 
 main()       

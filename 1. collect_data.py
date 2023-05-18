@@ -18,14 +18,14 @@ nk = [0,0,0,0,0,0,0,0,1]
 starting_value = 1
 
 while True:
-    file_name = 'training_data-{}.npy'.format(starting_value)
+    file_name = f'training_data-{starting_value}.npy'
 
     if os.path.isfile(file_name):
         print('File exists, moving along',starting_value)
         starting_value += 1
     else:
         print('File does not exist, starting fresh!',starting_value)
-        
+
         break
 
 
@@ -38,24 +38,23 @@ def keys_to_output(keys):
     output = [0,0,0,0,0,0,0,0,0]
 
     if 'W' in keys and 'A' in keys:
-        output = wa
+        return wa
     elif 'W' in keys and 'D' in keys:
-        output = wd
+        return wd
     elif 'S' in keys and 'A' in keys:
-        output = sa
+        return sa
     elif 'S' in keys and 'D' in keys:
-        output = sd
+        return sd
     elif 'W' in keys:
-        output = w
+        return w
     elif 'S' in keys:
-        output = s
+        return s
     elif 'A' in keys:
-        output = a
+        return a
     elif 'D' in keys:
-        output = d
+        return d
     else:
-        output = nk
-    return output
+        return nk
 
 
 def main(file_name, starting_value):
@@ -69,7 +68,7 @@ def main(file_name, starting_value):
     last_time = time.time()
     paused = False
     print('STARTING!!!')
-    while(True):
+    while True:
         
         if not paused:
             screen = grab_screen(region=(0,40,1920,1120))
@@ -78,7 +77,7 @@ def main(file_name, starting_value):
             screen = cv2.resize(screen, (480,270))
             # run a color convert:
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
-            
+
             keys = key_check()
             output = keys_to_output(keys)
             training_data.append([screen,output])
@@ -92,25 +91,25 @@ def main(file_name, starting_value):
 
             if len(training_data) % 100 == 0:
                 print(len(training_data))
-                
+
                 if len(training_data) == 500:
                     np.save(file_name,training_data)
                     print('SAVED')
                     training_data = []
                     starting_value += 1
-                    file_name = 'X:/pygta5/phase7-larger-color/training_data-{}.npy'.format(starting_value)
+                    file_name = f'X:/pygta5/phase7-larger-color/training_data-{starting_value}.npy'
 
-                    
+
         keys = key_check()
         if 'T' in keys:
             if paused:
                 paused = False
                 print('unpaused!')
-                time.sleep(1)
             else:
                 print('Pausing!')
                 paused = True
-                time.sleep(1)
+
+            time.sleep(1)
 
 
 main(file_name, starting_value)

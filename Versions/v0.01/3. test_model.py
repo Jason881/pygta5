@@ -93,12 +93,12 @@ def main():
         time.sleep(1)
 
     paused = False
-    while(True):
+    while True:
         
         if not paused:
             # 800x600 windowed mode
             screen = grab_screen(region=(0,40,800,640))
-            print('loop took {} seconds'.format(time.time()-last_time))
+            print(f'loop took {time.time() - last_time} seconds')
             last_time = time.time()
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
             screen = cv2.resize(screen, (160,120))
@@ -108,7 +108,7 @@ def main():
 
             if np.argmax(prediction) == np.argmax(w):
                 straight()
-                
+
             elif np.argmax(prediction) == np.argmax(s):
                 reverse()
             if np.argmax(prediction) == np.argmax(a):
@@ -125,19 +125,19 @@ def main():
                 reverse_right()
             if np.argmax(prediction) == np.argmax(nk):
                 no_keys()
-            
+
         keys = key_check()
 
         # p pauses game and can get annoying.
         if 'T' in keys:
             if paused:
                 paused = False
-                time.sleep(1)
             else:
                 paused = True
                 ReleaseKey(A)
                 ReleaseKey(W)
                 ReleaseKey(D)
-                time.sleep(1)
+
+            time.sleep(1)
 
 main()       

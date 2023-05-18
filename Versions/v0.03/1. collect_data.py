@@ -48,7 +48,7 @@ def main(file_name, starting_value):
     last_time = time.time()
     paused = False
     print('STARTING!!!')
-    while(True):
+    while True:
         if not paused:
             screen = grab_screen(region = (0, 40, 1920, 1120))
             last_time = time.time()
@@ -81,11 +81,11 @@ def main(file_name, starting_value):
             if paused:
                 paused = False
                 print('Unpaused!')
-                time.sleep(1)
             else:
                 print('Pausing!')
                 paused = True
-                time.sleep(1)
+
+            time.sleep(1)
 
 if __name__ == "__main__":
     main(file_name, starting_value)

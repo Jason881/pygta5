@@ -18,8 +18,7 @@ def draw_lines(img, lines):
 def roi(img, vertices):
     mask = np.zeros_like(img)
     cv2.fillPoly(mask, vertices, 255)
-    masked = cv2.bitwise_and(img, mask)
-    return masked
+    return cv2.bitwise_and(img, mask)
 
 
 def process_img(original_image):
@@ -37,10 +36,10 @@ def process_img(original_image):
 
 def main():
     last_time = time.time()
-    while(True):
+    while True:
         screen =  np.array(ImageGrab.grab(bbox=(0,40, 800, 640)))
         new_screen = process_img(screen)
-        print('Loop took {} seconds'.format(time.time()-last_time))
+        print(f'Loop took {time.time() - last_time} seconds')
         last_time = time.time()
         cv2.imshow('window', new_screen)
         #cv2.imshow('window2', cv2.cvtColor(screen, cv2.COLOR_BGR2RGB))
